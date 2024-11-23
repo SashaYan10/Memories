@@ -29,7 +29,6 @@ public class PlayerMovementMirror : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
 
-        // Знаходимо об'єкт з тегом "Player"
         GameObject player = GameObject.FindGameObjectWithTag(TagPlayer);
         if (player != null)
         {
@@ -42,38 +41,30 @@ public class PlayerMovementMirror : MonoBehaviour
     {
         if (!inDialogue())
         {
-            // Перевіряємо, чи змінилася позиція по X у основного персонажа
             bool isXChanged = !Mathf.Approximately(_playerTransform.position.x, _previousPlayerX);
 
             if (!isXChanged)
             {
-                // Якщо позиція по X у основного персонажа не змінилася,
-                // відзеркалений персонаж не рухається по осі X
                 _movement.Set(0, -InputManager.Movement.y * _verticalSpeed);
 
-                // Якщо натиснуті клавіші вліво або вправо, запускаємо анімацію руху
                 if (InputManager.Movement.x != 0)
                 {
                     _animator.SetFloat(_horizontal, InputManager.Movement.x);
                 }
                 else
                 {
-                    _animator.SetFloat(_horizontal, 0); // Зупинка анімації руху
+                    _animator.SetFloat(_horizontal, 0);
                 }
             }
             else
             {
-                // Якщо основний персонаж рухається по осі X, відзеркалений персонаж теж рухається
                 _movement.Set(InputManager.Movement.x * _horizontalSpeed, -InputManager.Movement.y * _verticalSpeed);
 
-                // Оновлюємо анімацію руху
                 _animator.SetFloat(_horizontal, _movement.x);
             }
 
-            // Оновлюємо попередню позицію по X
             _previousPlayerX = _playerTransform.position.x;
 
-            // Оновлюємо анімацію для вертикального руху
             _animator.SetFloat(_vertical, _movement.y / _verticalSpeed);
 
             if (_movement != Vector2.zero)
@@ -82,12 +73,13 @@ public class PlayerMovementMirror : MonoBehaviour
                 _animator.SetFloat(_lastVertical, _movement.y / _verticalSpeed);
             }
 
-            // Застосовуємо рух персонажа
             _rb.velocity = _movement;
         }
         else
         {
             _rb.velocity = Vector2.zero;
+            _animator.SetFloat(_horizontal, 0);
+            _animator.SetFloat(_vertical, 0);
         }
     }
 

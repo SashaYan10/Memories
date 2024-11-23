@@ -32,18 +32,25 @@ public class PlayerMovement : MonoBehaviour
 
             _rb.velocity = _movement * _moveSpeed;
 
-            _animator.SetFloat(_horizontal, _movement.x);
-            _animator.SetFloat(_vertical, _movement.y);
-
             if (_movement != Vector2.zero)
             {
+                _animator.SetFloat(_horizontal, _movement.x);
+                _animator.SetFloat(_vertical, _movement.y);
+
                 _animator.SetFloat(_lastHorizontal, _movement.x);
                 _animator.SetFloat(_lastVertical, _movement.y);
+            }
+            else
+            {
+                _animator.SetFloat(_horizontal, 0);
+                _animator.SetFloat(_vertical, 0);
             }
         }
         else
         {
             _rb.velocity = Vector2.zero;
+            _animator.SetFloat(_horizontal, 0);
+            _animator.SetFloat(_vertical, 0);
         }
     }
 
